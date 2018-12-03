@@ -1,0 +1,16 @@
+[package]
+authors = ["Kyle Partridge <kyle.partridge@sendgrid.com>"]
+edition = "2018"
+name = "advent"
+version = "0.1.0"
+
+[dependencies]
+getopts = "*"
+
+[[bin]]
+name = "adv_1_1"
+path = "src/adv_1_1.rs"
+
+[[bin]]
+name = "adv_1_2"
+path = "src/adv_1_2.rs"
