@@ -35,18 +35,18 @@ pub fn calibrate(file: &str) -> Result<i32, String> {
     // loop continually until a frequency is found
     // Note: if a frequency is not found, it will continually loop
     // causing a deadlock
-    loop {
-        for line in lines.iter() {
-            let num = parse_frequency(&line[..])?;
-            freq += num;
+    for line in lines.iter().cycle() {
+        let num = parse_frequency(&line[..])?;
+        freq += num;
 
-            if frequencies.contains(&freq) {
-                return Ok(freq);
-            }
-
-            frequencies.insert(freq);
+        if frequencies.contains(&freq) {
+            return Ok(freq);
         }
+
+        frequencies.insert(freq);
     }
+
+    Err("not found".to_string())
 }
 
 #[cfg(test)]
