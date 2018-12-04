@@ -65,9 +65,8 @@ mod tests {
             parse_frequency("-19")
         );
 
-        assert_eq!(
-            Err("invalid digit found in string".to_string()),
-            parse_frequency("boof")
+        assert!(
+            Result::is_err(&parse_frequency("moo"))
         );
     }
 
