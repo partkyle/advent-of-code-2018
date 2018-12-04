@@ -4,27 +4,40 @@ use std::collections::HashSet;
 use std::fs::File;
 use std::io::BufReader;
 
-pub fn handle_frequency_line(line: Result<String, std::io::Error>) -> Result<i32, String> {
-    let line = line.map_err(|e| e.to_string())?;
-    i32::from_str_radix(&line[..], 10).map_err(|e| e.to_string())
+
+pub fn parse_frequency(s: &str) -> Result<i32, String> {
+    i32::from_str_radix(s, 10).map_err(|e| e.to_string())
 }
 
 pub fn calculate_frequency(file: &str) -> Result<i32, String> {
     let f = File::open(file).expect("File not found");
     let r = BufReader::new(f);
 
-    r.lines().map(handle_frequency_line).sum()
+    r.lines().map(|line| match line {
+        Ok(s) => parse_frequency(&s[..]),
+        Err(err) => Err(err.to_string())
+    }).sum()
 }
 
 pub fn calibrate(file: &str) -> Result<i32, String> {
     let mut frequencies = HashSet::new();
     let mut freq = 0;
-    loop {
-        let f = File::open(file).expect("File not found");
-        let r = BufReader::new(f);
 
-        for line in r.lines() {
-            let num = handle_frequency_line(line)?;
+    // use a buffered reader to get access to line-by-line reading
+    let f = File::open(file).expect("File not found");
+    let r = BufReader::new(f);
+
+    // collect the lines into a collection that doesn't require matching
+    // over Result types
+    let lines: Result<Vec<_>, _> = r.lines().collect();
+    let lines = lines.map_err(|e| e.to_string())?;
+
+    // loop continually until a frequency is found
+    // Note: if a frequency is not found, it will continually loop
+    // causing a deadlock
+    loop {
+        for line in lines.iter() {
+            let num = parse_frequency(&line[..])?;
             freq += num;
 
             if frequencies.contains(&freq) {
@@ -41,7 +54,7 @@ mod tests {
     use super::*;
 
     #[test]
-    pub fn test_day_1() {
+    pub fn test_day_1_part_1() {
         assert_eq!(
             580,
             calculate_frequency("files/day_1.txt").unwrap()
@@ -49,7 +62,7 @@ mod tests {
     }
 
     #[test]
-    pub fn test_day_2() {
+    pub fn test_day_1_part_2() {
         assert_eq!(
             81972,
             calibrate("files/day_1.txt").unwrap()
