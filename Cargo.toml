@@ -7,10 +7,3 @@ version = "0.1.0"
 [dependencies]
 getopts = "*"
 
-[[bin]]
-name = "adv_1_1"
-path = "src/adv_1_1.rs"
-
-[[bin]]
-name = "adv_1_2"
-path = "src/adv_1_2.rs"
