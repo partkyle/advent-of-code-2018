@@ -54,6 +54,24 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_parse_frequency() {
+        assert_eq!(
+            Ok(1),
+            parse_frequency("+1")
+        );
+
+        assert_eq!(
+            Ok(-19),
+            parse_frequency("-19")
+        );
+
+        assert_eq!(
+            Err("invalid digit found in string".to_string()),
+            parse_frequency("boof")
+        );
+    }
+
+    #[test]
     pub fn test_day_1_part_1() {
         assert_eq!(
             580,
