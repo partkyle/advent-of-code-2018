@@ -43,16 +43,16 @@ mod tests {
     #[test]
     pub fn test_day_1() {
         assert_eq!(
-            Ok(580),
-            calculate_frequency("files/day_1.txt")
+            580,
+            calculate_frequency("files/day_1.txt").unwrap()
         );
     }
 
     #[test]
     pub fn test_day_2() {
         assert_eq!(
-            Ok(81972),
-            calibrate("files/day_1.txt")
+            81972,
+            calibrate("files/day_1.txt").unwrap()
         );
     }
 }
